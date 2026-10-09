@@ -50,8 +50,10 @@ Create two services from this repository, or apply `render.yaml` as a Blueprint.
 
 Set `VITE_API_URL` to the backend origin, with no trailing slash, for example `https://payment-test-store-api.onrender.com`. Vite reads it at build time, so change it and redeploy the static site together.
 
-## Webhook
+## Webhook and status
 
-Register `https://<backend-host>/webhooks/duco` for `PaymentIntentSucceeded`, `PaymentIntentFailed`, and `PaymentIntentCanceled`.
+Register `https://<backend-host>/webhooks/duco` for `PaymentIntentSucceeded`, `PaymentIntentFailed`, and `PaymentIntentCanceled`. The webhook is what records the payment.
+
+The return page also asks the API to read the payment. Duco can leave the checkout session `active` after a successful card payment and set the payment intent to `succeeded`. The waiting page polls every 3 seconds for up to 2 minutes and stops when the intent has succeeded, the session is `consumed`, or the payment has failed, expired, or been canceled.
 
 Orders are stored in `backend/data/orders.json`. Render’s disk is replaced on each deploy, so those orders do not survive a restart.

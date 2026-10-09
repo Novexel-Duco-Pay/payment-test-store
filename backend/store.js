@@ -161,5 +161,7 @@ export function publicOrder(order) {
     failureReason: order.failureReason,
     confirmedBy: order.confirmedBy,
     sessionStatus: order.sessionStatus,
+    paymentStatus: order.paymentStatus || null,
+    pollAfterMs: order.pollAfterMs || null,
   };
 }
