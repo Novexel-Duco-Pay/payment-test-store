@@ -9,7 +9,7 @@ export const products = [
     description:
       "Hand-glazed 350 ml mug that keeps your coffee warm through the morning stand-up.",
     image: "/img/mug.svg",
-    price: 1800,
+    price: 800,
     currency: CURRENCY,
   },
   {
@@ -18,7 +18,7 @@ export const products = [
     description:
       "Heavyweight cotton tote with an inner pocket. Carries a laptop and lunch.",
     image: "/img/tote.svg",
-    price: 2400,
+    price: 900,
     currency: CURRENCY,
   },
   {
@@ -27,7 +27,7 @@ export const products = [
     description:
       "A5, 160 pages of 100 gsm paper. Lies flat, takes fountain pens well.",
     image: "/img/notebook.svg",
-    price: 1200,
+    price: 600,
     currency: CURRENCY,
   },
   {
@@ -36,7 +36,7 @@ export const products = [
     description:
       "Low-maintenance succulent in a 9 cm terracotta pot. Water every two weeks.",
     image: "/img/plant.svg",
-    price: 1500,
+    price: 500,
     currency: CURRENCY,
   },
   {
@@ -44,7 +44,7 @@ export const products = [
     name: "Insulated Bottle",
     description: "Double-walled steel, 750 ml. Cold for 24 hours, hot for 12.",
     image: "/img/bottle.svg",
-    price: 3200,
+    price: 400,
     currency: CURRENCY,
   },
   {
@@ -53,7 +53,7 @@ export const products = [
     description:
       "Closed-back over-ear headphones with a detachable 3.5 mm cable.",
     image: "/img/headphones.svg",
-    price: 7900,
+    price: 900,
     currency: CURRENCY,
   },
 ];
