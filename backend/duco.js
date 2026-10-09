@@ -64,6 +64,10 @@ export function getCheckoutSession(id) {
   return duco(`/v2.0/api/checkout-sessions/${encodeURIComponent(id)}`);
 }
 
+export function getPaymentIntent(id) {
+  return duco(`/v2.0/api/payment-intents/${encodeURIComponent(id)}`);
+}
+
 function errorMessage(data, fallback) {
   const value = data?.error || data?.message || data?.detail;
   if (!value) return fallback;
