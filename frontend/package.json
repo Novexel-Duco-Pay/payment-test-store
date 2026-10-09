@@ -1,0 +1,21 @@
+{
+  "name": "payment-test-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Storefront for the Duco checkout test store",
+  "type": "module",
+  "scripts": {
+    "dev": "node init && vite",
+    "build": "node init && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.5.0",
+    "vite": "^6.3.5"
+  }
+}
