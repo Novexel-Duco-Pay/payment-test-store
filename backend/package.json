@@ -1,0 +1,14 @@
+{
+  "name": "payment-test-store-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Checkout and Duco webhook API for the test store",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  }
+}

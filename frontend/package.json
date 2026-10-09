@@ -2,7 +2,7 @@
   "name": "payment-test-store",
   "version": "1.0.0",
   "private": true,
-  "description": "Minimal storefront that posts checkout details to a payment URL",
+  "description": "Storefront for the Duco checkout test store",
   "type": "module",
   "scripts": {
     "dev": "vite",
