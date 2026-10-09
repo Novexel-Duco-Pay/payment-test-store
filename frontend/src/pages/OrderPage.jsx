@@ -5,6 +5,8 @@ import { cart } from '../lib/cart.js';
 import { fetchOrder } from '../lib/payment.js';
 
 const TERMINAL = new Set(['paid', 'failed', 'canceled', 'expired']);
+const POLL_MS = 3000;
+const POLL_LIMIT_MS = 120000;
 
 function DetailRow({ label, value }) {
   return (
@@ -21,22 +23,26 @@ function tone(status) {
   return 'failed';
 }
 
-function title(status) {
+function title(status, timedOut) {
   if (status === 'paid') return 'Payment confirmed';
+  if (timedOut && (!status || status === 'pending')) return 'Still waiting';
   if (status === 'pending') return 'Waiting for confirmation';
   if (status === 'expired') return 'Checkout expired';
   if (status === 'canceled') return 'Payment canceled';
   return 'Payment failed';
 }
 
-function message(order) {
+function message(order, timedOut) {
   if (order.status === 'paid') {
     return order.confirmedBy === 'webhook'
       ? 'Duco confirmed this payment with a signed webhook.'
-      : 'Duco marked the checkout session as paid.';
+      : 'Duco confirmed this payment.';
+  }
+  if (order.status === 'pending' && timedOut) {
+    return 'No final status arrived within 2 minutes. You can check again, or return to checkout if the payment did not go through.';
   }
   if (order.status === 'pending') {
-    return 'Card details are entered on Duco. This page updates when the signed webhook arrives. The return visit alone does not complete the order.';
+    return 'Duco is confirming the payment. This page checks the payment status every few seconds.';
   }
   return order.failureReason || 'The payment was not completed.';
 }
@@ -45,6 +51,8 @@ export default function OrderPage() {
   const { reference } = useParams();
   const [order, setOrder] = useState(null);
   const [error, setError] = useState('');
+  const [timedOut, setTimedOut] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   const statusRef = useRef('');
 
   useEffect(() => {
@@ -53,6 +61,9 @@ export default function OrderPage() {
 
   useEffect(() => {
     let stop = false;
+    const started = Date.now();
+    setTimedOut(false);
+    statusRef.current = '';
 
     async function tick() {
       try {
@@ -67,20 +78,29 @@ export default function OrderPage() {
       }
     }
 
-    statusRef.current = '';
     tick();
     const timer = setInterval(() => {
-      if (!TERMINAL.has(statusRef.current)) tick();
-    }, 2000);
+      if (TERMINAL.has(statusRef.current)) {
+        clearInterval(timer);
+        return;
+      }
+      if (Date.now() - started >= POLL_LIMIT_MS) {
+        setTimedOut(true);
+        clearInterval(timer);
+        return;
+      }
+      tick();
+    }, POLL_MS);
 
     return () => {
       stop = true;
       clearInterval(timer);
     };
-  }, [reference]);
+  }, [reference, attempt]);
 
   const status = order?.status;
   const view = tone(status);
+  const waiting = !status || status === 'pending';
 
   return (
     <main className="container">
@@ -88,8 +108,8 @@ export default function OrderPage() {
         <div className="result__icon" aria-hidden="true">
           {status === 'paid' ? '✓' : status && status !== 'pending' ? '✕' : <span className="spinner" />}
         </div>
-        <h1>{error && !order ? 'Order unavailable' : title(status || 'pending')}</h1>
-        <p className="muted">{error && !order ? error : order ? message(order) : 'Checking the order with the store.'}</p>
+        <h1>{error && !order ? 'Order unavailable' : title(status || 'pending', timedOut)}</h1>
+        <p className="muted">{error && !order ? error : order ? message(order, timedOut) : 'Checking the payment with Duco.'}</p>
         {order && (
           <>
             <dl className="details">
@@ -105,6 +125,11 @@ export default function OrderPage() {
           <Link to="/" className="btn btn--primary">
             Continue shopping
           </Link>
+          {timedOut && waiting && (
+            <button type="button" className="btn" onClick={() => setAttempt((value) => value + 1)}>
+              Check again
+            </button>
+          )}
           {status && status !== 'paid' && status !== 'pending' && (
             <Link to="/checkout" className="btn">
               Try again
