@@ -1,6 +1,8 @@
 export const CURRENCY = "GHS";
 export const TAX_RATE = 0.075;
-export const SHIPPING_CENTS = 500;
+// GHS 1.00. Duco's test mode refuses an order above GHS 10.00, so shipping is small and every product can
+// still be bought on its own (the dearest is GHS 8.00 + 7.5% tax + 1.00 = 9.60).
+export const SHIPPING_CENTS = 100;
 
 export const products = [
   {
@@ -18,7 +20,7 @@ export const products = [
     description:
       "Heavyweight cotton tote with an inner pocket. Carries a laptop and lunch.",
     image: "/img/tote.svg",
-    price: 900,
+    price: 700,
     currency: CURRENCY,
   },
   {
@@ -53,7 +55,7 @@ export const products = [
     description:
       "Closed-back over-ear headphones with a detachable 3.5 mm cable.",
     image: "/img/headphones.svg",
-    price: 900,
+    price: 800,
     currency: CURRENCY,
   },
 ];
