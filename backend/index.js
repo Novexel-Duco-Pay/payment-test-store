@@ -2,6 +2,7 @@ import crypto from "node:crypto";
 import { createServer } from "node:http";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { limitMessage, orderLimitMinor } from "./lib/limits.js";
 import { priceCart } from "./lib/pricing.js";
 import {
   createCheckoutSession,
@@ -44,6 +45,10 @@ const server = createServer(async (req, res) => {
         merchantKey: Boolean(merchantKey()),
         webhookSecret: Boolean(webhookSecret()),
       });
+    }
+    if (req.method === "GET" && url.pathname === "/api/config") {
+      // What the storefront needs to warn before checkout: the most an order may be (null: no limit).
+      return send(res, 200, { maxOrderMinor: orderLimitMinor(merchantKey()) });
     }
     if (req.method === "POST" && url.pathname === "/api/checkout-sessions") {
       return await handleCheckout(req, res);
@@ -93,6 +98,12 @@ async function handleCheckout(req, res) {
   const quote = priceCart(items);
   if (!quote.lines.length)
     return send(res, 400, { error: "The cart is empty." });
+  const limit = orderLimitMinor(merchantKey());
+  if (limit !== null && quote.total > limit) {
+    return send(res, 400, {
+      error: limitMessage({ total: quote.total, currency: quote.currency, limit }),
+    });
+  }
 
   const reference = newReference();
   const description = quote.lines

@@ -2,12 +2,15 @@ import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import OrderSummary from '../components/OrderSummary.jsx';
 import { cart, useCartItems } from '../lib/cart.js';
+import { useOrderLimit } from '../lib/config.js';
 import { formatMoney } from '../lib/format.js';
 import { priceCart } from '../lib/pricing.js';
 
 export default function CartPage() {
   const items = useCartItems();
   const quote = useMemo(() => (items.length ? priceCart(items) : null), [items]);
+  const limit = useOrderLimit();
+  const overLimit = quote !== null && limit !== null && quote.total > limit;
 
   useEffect(() => {
     document.title = 'Cart · Sandbox Store';
@@ -81,9 +84,21 @@ export default function CartPage() {
         <aside className="card summary">
           <h2>Order summary</h2>
           <OrderSummary quote={quote} />
-          <Link to="/checkout" className="btn btn--primary btn--block btn--lg">
-            Checkout
-          </Link>
+          {overLimit && (
+            <p className="alert alert--error" role="alert">
+              Test payments are limited to {formatMoney(limit, quote.currency)}; this order is{' '}
+              {formatMoney(quote.total, quote.currency)}. Remove an item or lower a quantity.
+            </p>
+          )}
+          {overLimit ? (
+            <button type="button" className="btn btn--primary btn--block btn--lg" disabled>
+              Checkout
+            </button>
+          ) : (
+            <Link to="/checkout" className="btn btn--primary btn--block btn--lg">
+              Checkout
+            </Link>
+          )}
           <Link to="/" className="btn btn--block">
             Continue shopping
           </Link>
