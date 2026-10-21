@@ -40,6 +40,7 @@ Create two services from this repository, or apply `render.yaml` as a Blueprint.
 | `DUCO_WEBHOOK_SECRET` | Signing secret (`whsec_…`) from the webhook endpoint. |
 | `DUCO_API_BASE` | Defaults to `https://api-staging.ducopay.com`. |
 | `APP_ORIGIN` | Storefront origin, such as `https://payment-test-store.onrender.com`. Used for the checkout return URL and browser CORS. |
+| `DUCO_TEST_MAX_AMOUNT_MINOR` | Optional. The most an order may be with a test key, in minor units. Defaults to `1000` (GHS 10.00): Duco's test mode refuses more, so a larger order is refused here, and the cart says so, instead of failing at the payment step. `0` turns it off. A live key has no limit. |
 
 **Frontend static site**
 
