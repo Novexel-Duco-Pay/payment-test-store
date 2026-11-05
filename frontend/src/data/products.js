@@ -58,5 +58,37 @@ export const products = [
     price: 800,
     currency: CURRENCY,
   },
+  {
+    id: "iphone-18",
+    name: "Iphone 18 Mobile phone",
+    description: "New Iphone 18 Phone",
+    image: "/img/notebook.svg",
+    price: 2000000,
+    currency: CURRENCY,
+  },
+  {
+    id: "iphone-17",
+    name: "Iphone 17 Mobile phone",
+    description: "New Iphone 18 Phone",
+    image: "/img/notebook.svg",
+    price: 1500000,
+    currency: CURRENCY,
+  },
+  {
+    id: "iphone-16",
+    name: "Iphone 16 Mobile phone",
+    description: "New Iphone 18 Phone",
+    image: "/img/notebook.svg",
+    price: 1000000,
+    currency: CURRENCY,
+  },
+  {
+    id: "iphone-15",
+    name: "Iphone 15 Mobile phone",
+    description: "New Iphone 18 Phone",
+    image: "/img/notebook.svg",
+    price: 500000,
+    currency: CURRENCY,
+  },
 ];
 export const findProduct = (id) => products.find((p) => p.id === id);
