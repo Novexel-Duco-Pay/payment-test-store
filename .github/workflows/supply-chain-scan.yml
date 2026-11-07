@@ -1,0 +1,24 @@
+name: Supply chain scan
+
+# Rejects commits carrying the obfuscated loaders used in the 2026 repository worm
+# (hidden long-line payloads, `init` / `.orc` droppers, injected npm script steps,
+# auto-run VS Code tasks). It only reads files; no repository code is executed.
+# Make this check required in branch protection so infected changes cannot be merged.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  supply-chain-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Supply chain audit
+        run: bash .github/scripts/supply-chain-scan.sh
