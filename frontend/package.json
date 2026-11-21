@@ -5,8 +5,8 @@
   "description": "Storefront for the Duco checkout test store",
   "type": "module",
   "scripts": {
-    "dev": "node init && vite",
-    "build": "node init && vite build",
+    "dev": "vite",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
