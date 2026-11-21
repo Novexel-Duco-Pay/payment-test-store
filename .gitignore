@@ -2,4 +2,8 @@ node_modules/
 dist/
 **/data/orders.json
 *.log
-config.bat
+
+# Local environment files
+.env
+.env.*
+!.env.example
